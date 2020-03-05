@@ -1,86 +1,43 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { MdShoppingCart } from 'react-icons/md';
+import { formatPrice } from '../../util/format';
+import api from '../../services/api';
 
 import { ProductList } from './styles';
 
 export default function Home() {
+  const [products, setProduct] = useState([]);
+
+  useEffect(() => {
+    async function loadProduct() {
+      const response = await api.get('products');
+      const data = response.data.map(product => ({
+        ...product,
+        priceFormatted: formatPrice(product.price),
+      }));
+
+      setProduct(data);
+    }
+
+    loadProduct();
+  });
+
   return (
     <ProductList>
-      <li>
-        <img
-          src="https://imgcentauro-a.akamaihd.net/250x250/93556002A1/tenis-fila-lugano-6-0-masculino-img.jpg"
-          alt="Tênis"
-        />
-        <strong>Tênis muito legal</strong>
-        <span>R$:129,99</span>
+      {products.map(product => (
+        <li key={product.id}>
+          <img src={product.image} alt="Tênis" />
+          <strong>{product.title}</strong>
+          <span>{product.priceFormatted}</span>
 
-        <button type="button">
-          <div>
-            <MdShoppingCart size={16} color="#FFF" /> 3
-          </div>
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-      <li>
-        <img
-          src="https://imgcentauro-a.akamaihd.net/250x250/93556002A1/tenis-fila-lugano-6-0-masculino-img.jpg"
-          alt="Tênis"
-        />
-        <strong>Tênis muito legal</strong>
-        <span>R$:129,99</span>
-
-        <button type="button">
-          <div>
-            <MdShoppingCart size={16} color="#FFF" /> 3
-          </div>
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-      <li>
-        <img
-          src="https://imgcentauro-a.akamaihd.net/250x250/93556002A1/tenis-fila-lugano-6-0-masculino-img.jpg"
-          alt="Tênis"
-        />
-        <strong>Tênis muito legal</strong>
-        <span>R$:129,99</span>
-
-        <button type="button">
-          <div>
-            <MdShoppingCart size={16} color="#FFF" /> 3
-          </div>
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-      <li>
-        <img
-          src="https://imgcentauro-a.akamaihd.net/250x250/93556002A1/tenis-fila-lugano-6-0-masculino-img.jpg"
-          alt="Tênis"
-        />
-        <strong>Tênis muito legal</strong>
-        <span>R$:129,99</span>
-
-        <button type="button">
-          <div>
-            <MdShoppingCart size={16} color="#FFF" /> 3
-          </div>
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-      <li>
-        <img
-          src="https://imgcentauro-a.akamaihd.net/250x250/93556002A1/tenis-fila-lugano-6-0-masculino-img.jpg"
-          alt="Tênis"
-        />
-        <strong>Tênis muito legal</strong>
-        <span>R$:129,99</span>
-
-        <button type="button">
-          <div>
-            <MdShoppingCart size={16} color="#FFF" /> 3
-          </div>
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
+          <button type="button">
+            <div>
+              <MdShoppingCart size={16} color="#FFF" /> 3
+            </div>
+            <span>ADICIONAR AO CARRINHO</span>
+          </button>
+        </li>
+      ))}
     </ProductList>
   );
 }
