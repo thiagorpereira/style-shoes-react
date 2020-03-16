@@ -25,10 +25,10 @@ export default function cart(state = [], action) {
           draft.splice(productIndex, 1); // index q quer remover e a quantidade que remover apartir dele
         }
       });
-    case '@cart/UPDATE_AMOUNT': {
-      if (action.amount <= 0) {
-        return state;
-      }
+    case '@cart/UPDATE_AMOUNT_SUCCESS': {
+      // if (action.amount <= 0) {
+      //   return state;
+      // }
 
       return produce(state, draft => {
         const productIndex = draft.findIndex(p => p.id === action.id);

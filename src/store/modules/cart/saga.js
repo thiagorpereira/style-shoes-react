@@ -1,24 +1,33 @@
 import { call, select, put, all, takeLatest } from 'redux-saga/effects';
+import { toast } from 'react-toastify';
 
 import api from '../../../services/api';
+import history from '../../../services/history';
+
 import { formatPrice } from '../../../util/format';
 
-import { addToCartSuccess, updateAmount } from './actions';
+import { addToCartSuccess, updateAmountSuccess } from './actions';
 
 function* addToCart({ id }) {
-  // Find product in cart state in Saga
+  // Find product in cart state with Saga skills
   const productExists = yield select(state =>
     state.cart.find(p => p.id === id)
   );
 
   const stock = yield call(api.get, `/stock/${id}`);
 
-  const sto
+  const stockAmount = stock.data.amount;
+  const currentAmount = productExists ? productExists.amount : 0;
+
+  const amount = currentAmount + 1;
+
+  if (amount > stockAmount) {
+    toast.error('Quantidade solicidade fora do estoque');
+    return;
+  }
 
   if (productExists) {
-    const amount = productExists.amount + 1;
-
-    yield put(updateAmount(id, amount));
+    yield put(updateAmountSuccess(id, amount));
   } else {
     const response = yield call(api.get, `/products/${id}`);
 
@@ -30,8 +39,27 @@ function* addToCart({ id }) {
 
     // dispatch
     yield put(addToCartSuccess(data));
+    history.push('/cart');
   }
 }
 
+function* updateAmount({ id, amount }) {
+  if (amount <= 0) return;
+
+  const stock = yield call(api.get, `/stock/${id}`);
+  const stockAmount = stock.data.amount;
+
+  if (amount > stockAmount) {
+    toast.error('Quantidade solicitada fora de estoque');
+    return;
+  }
+
+  // dispatch
+  yield put(updateAmountSuccess(id, amount));
+}
+
 // Listen
-export default all([takeLatest('@cart/ADD_REQUEST', addToCart)]);
+export default all([
+  takeLatest('@cart/ADD_REQUEST', addToCart),
+  takeLatest('@cart/UPDATE_AMOUNT_REQUEST', updateAmount),
+]);
