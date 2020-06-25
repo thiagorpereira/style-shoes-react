@@ -10,9 +10,17 @@
   <a href="#rocket-technologies">Technologies</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#information_source-how-to-use">How To Use</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#memo-license">License</a>
+    &nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="https://thiagorpereira-styleshoes.herokuapp.com/">Deploy</a>
 </p>
 
-![App Screenshot](styleshoes.gif)
+<div align="center"><img src="styleshoes.gif" alt="styleshoes-gif" /></div>
+
+<p align="center">
+  <a href="https://thiagorpereira-styleshoes.herokuapp.com/" target="_blank">
+    <img alt="Demo on Heroku" src="demo_on_heroku.png">
+  </a>
+</p>
 
 ## :rocket: Technologies
 
